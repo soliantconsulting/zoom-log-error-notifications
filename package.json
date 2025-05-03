@@ -1,0 +1,51 @@
+{
+  "name": "@soliantconsulting/zoom-log-error-notifications",
+  "version": "1.0.0",
+  "description": "Receive error notifications in zoom about errors in logs",
+  "type": "module",
+  "author": "Soliant Consulting",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && ./build-handler.sh",
+    "format": "biome format . --write",
+    "check": "biome check . --write"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.799.0",
+    "@biomejs/biome": "1.9.4",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@tsconfig/node22": "^22.0.1",
+    "@types/aws-lambda": "^8.10.149",
+    "@types/node": "^22.14.0",
+    "aws-cdk-lib": "^2.188.0",
+    "constructs": "^10.4.2",
+    "esbuild": "^0.25.3",
+    "lefthook": "^1.11.8",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.188.0",
+    "constructs": "^10.4.2"
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "dependencies": {
+    "undent": "^0.1.0"
+  }
+}
