@@ -2,6 +2,10 @@
   "name": "@soliantconsulting/zoom-log-error-notifications",
   "version": "1.0.0",
   "description": "Receive error notifications in zoom about errors in logs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soliantconsulting/zoom-log-error-notifications.git"
+  },
   "type": "module",
   "author": "Soliant Consulting",
   "license": "MIT",
