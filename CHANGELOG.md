@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.0.1...v1.1.0) (2025-11-20)
+
+
+### Features
+
+* allow overriding name of query definition ([9f1fd55](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/9f1fd55343785a222e178caeec401e259d69d982))
+
 ## [1.0.1](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.0.0...v1.0.1) (2025-10-22)
 
 
