@@ -38,6 +38,13 @@ export type ZoomLogErrorNotificationsProps = {
      * Threshold before reporting new errors, defaults to 15 minutes
      */
     reportThreshold?: Duration;
+
+    /**
+     * Name override for the query definition
+     *
+     * Defaults to "<stack-name>/Errors".
+     */
+    queryDefinitionName?: string;
 };
 
 export class ZoomLogErrorNotifications extends Construct {
@@ -46,7 +53,7 @@ export class ZoomLogErrorNotifications extends Construct {
         const stack = Stack.of(this);
 
         new CfnQueryDefinition(this, "ErrorsQueryDefinition", {
-            name: `${stack.stackName}/Errors`,
+            name: props.queryDefinitionName ?? `${stack.stackName}/Errors`,
             logGroupNames: [props.logGroup.logGroupName],
             queryString: undent(`
                 fields @timestamp, @message
