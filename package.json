@@ -1,6 +1,6 @@
 {
   "name": "@soliantconsulting/zoom-log-error-notifications",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Receive error notifications in zoom about errors in logs",
   "repository": {
     "type": "git",

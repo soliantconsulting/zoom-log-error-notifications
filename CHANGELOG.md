@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.2...v1.2.3) (2025-11-21)
+
+
+### Bug Fixes
+
+* move log group name from link to text ([3988aed](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/3988aed1fbe64ce262653c644cfd624bd9707edd))
+
 ## [1.2.2](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.1...v1.2.2) (2025-11-21)
 
 
