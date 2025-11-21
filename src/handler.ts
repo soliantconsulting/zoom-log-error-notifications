@@ -127,8 +127,7 @@ export const main = async (event: CloudWatchLogsEvent): Promise<void> => {
         },
         {
             type: "message",
-            text: "Log Group Name",
-            link: data.logGroup,
+            text: `Log Group Name: ${data.logGroup}`,
         },
     ];
 
