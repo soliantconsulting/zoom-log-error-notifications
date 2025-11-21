@@ -18,29 +18,31 @@ import { undent } from "undent";
 
 export type ZoomLogErrorNotificationsProps = {
     /**
-     * Log group to report errors for
+     * Log group to report errors for.
+     *
+     * @deprecated Use `addLogGroup` instead
      */
-    logGroup: ILogGroup;
+    logGroup?: ILogGroup;
 
     /**
-     * Secret which contains credentials of your Incoming Webhook
+     * Secret which contains credentials of your Incoming Webhook.
      *
      * Must contain the two properties "endpointUrl" and "verificationToken".
      */
     zoomSecret: ISecret;
 
     /**
-     * Subdomain of your AWS access portal to allow single sign on
+     * Subdomain of your AWS access portal to allow single sign on.
      */
     awsAccessPortalSubdomain?: string;
 
     /**
-     * Threshold before reporting new errors, defaults to 15 minutes
+     * Threshold before reporting new errors, defaults to 15 minutes.
      */
     reportThreshold?: Duration;
 
     /**
-     * Name override for the query definition
+     * Name override for the query definition.
      *
      * Defaults to "<stack-name>/Errors".
      */
@@ -48,13 +50,16 @@ export type ZoomLogErrorNotificationsProps = {
 };
 
 export class ZoomLogErrorNotifications extends Construct {
+    private readonly logDestination: LambdaDestination;
+    private readonly queryDefinition: CfnQueryDefinition;
+
     public constructor(scope: Construct, id: string, props: ZoomLogErrorNotificationsProps) {
         super(scope, id);
         const stack = Stack.of(this);
 
-        new CfnQueryDefinition(this, "ErrorsQueryDefinition", {
+        this.queryDefinition = new CfnQueryDefinition(this, "ErrorsQueryDefinition", {
             name: props.queryDefinitionName ?? `${stack.stackName}/Errors`,
-            logGroupNames: [props.logGroup.logGroupName],
+            logGroupNames: [],
             queryString: undent(`
                 fields @timestamp, @message
                 | filter level = "error" or level = "fatal"
@@ -70,10 +75,8 @@ export class ZoomLogErrorNotifications extends Construct {
             handler: "index.main",
             code: Code.fromAsset(fileURLToPath(new URL("./handler", import.meta.url))),
             environment: {
+                AWS_ACCOUNT_ID: stack.account,
                 ZOOM_SECRET_ID: props.zoomSecret.secretArn,
-                LOG_ACCOUNT_ID: props.logGroup.stack.account,
-                LOG_REGION: props.logGroup.stack.region,
-                LOG_GROUP: props.logGroup.logGroupName,
                 REPORT_THRESHOLD: props.reportThreshold?.toSeconds().toString() ?? "",
                 AWS_ACCESS_PORTAL_SUBDOMAIN: props.awsAccessPortalSubdomain ?? "",
             },
@@ -81,13 +84,22 @@ export class ZoomLogErrorNotifications extends Construct {
         });
         props.zoomSecret.grantRead(zoomNotificationFunction);
 
+        this.logDestination = new LambdaDestination(zoomNotificationFunction);
+
+        if (props.logGroup) {
+            this.addLogGroup(props.logGroup);
+        }
+    }
+
+    public addLogGroup(logGroup: ILogGroup): void {
         new SubscriptionFilter(this, "SubscriptionFilter", {
-            logGroup: props.logGroup,
+            logGroup: logGroup,
             filterPattern: FilterPattern.any(
                 FilterPattern.stringValue("$.level", "=", "error"),
                 FilterPattern.stringValue("$.level", "=", "fatal"),
             ),
-            destination: new LambdaDestination(zoomNotificationFunction),
+            destination: this.logDestination,
         });
+        this.queryDefinition.logGroupNames?.push(logGroup.logGroupName);
     }
 }

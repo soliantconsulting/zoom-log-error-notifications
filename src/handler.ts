@@ -38,38 +38,41 @@ const zoomSecret = await (async () => {
     throw new Error("Secret must be an object with endpointUrl and verificationToken");
 })();
 
-const [logInsightsUrl, logGroupUrl] = (() => {
-    if (!process.env.LOG_ACCOUNT_ID) {
+type LogUrls = {
+    logInsightsUrl: string;
+    logGroupUrl: string;
+};
+
+const createLogUrls = (logGroupName: string): LogUrls => {
+    if (!process.env.AWS_ACCOUNT_ID) {
         throw new Error("LOG_ACCOUNT_ID env variable missing");
     }
 
-    if (!process.env.LOG_REGION) {
-        throw new Error("LOG_REGION env variable missing");
+    if (!process.env.AWS_REGION) {
+        throw new Error("AWS_REGION env variable missing");
     }
 
-    if (!process.env.LOG_GROUP) {
-        throw new Error("LOG_GROUP env variable missing");
-    }
-
-    const logAccountId = process.env.LOG_ACCOUNT_ID;
-    const logRegion = process.env.LOG_REGION;
-    const logGroup = process.env.LOG_GROUP;
+    const accountId = process.env.AWS_ACCOUNT_ID;
+    const region = process.env.AWS_REGION;
     const awsAccessPortalSubdomain = process.env.AWS_ACCESS_PORTAL_SUBDOMAIN ?? "";
 
     const cloudwatchUrl = new URL(
-        `https://${logRegion}.console.aws.amazon.com/cloudwatch/home?region=${logRegion}`,
+        `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}`,
     );
     const logInsightsUrl = new URL(cloudwatchUrl);
     logInsightsUrl.hash = "logsV2:logs-insights";
     const logGroupUrl = new URL(cloudwatchUrl);
-    logGroupUrl.hash = `logsV2:log-groups/log-group/${logGroup}`;
+    logGroupUrl.hash = `logsV2:log-groups/log-group/${logGroupName}`;
 
     if (!awsAccessPortalSubdomain) {
-        return [logInsightsUrl.toString(), logGroupUrl.toString()];
+        return {
+            logInsightsUrl: logInsightsUrl.toString(),
+            logGroupUrl: logGroupUrl.toString(),
+        };
     }
 
     const shortcutUrl = new URL(`https://${awsAccessPortalSubdomain}.awsapps.com/start/#/console`);
-    shortcutUrl.searchParams.set("account_id", logAccountId);
+    shortcutUrl.searchParams.set("account_id", accountId);
 
     const shortcutLogInsightsUrl = new URL(shortcutUrl);
     shortcutLogInsightsUrl.searchParams.set("destination", logInsightsUrl.toString());
@@ -77,8 +80,11 @@ const [logInsightsUrl, logGroupUrl] = (() => {
     const shortcutLogGroupUrl = new URL(shortcutUrl);
     shortcutLogGroupUrl.searchParams.set("destination", logGroupUrl.toString());
 
-    return [shortcutLogInsightsUrl.toString(), shortcutLogGroupUrl.toString()];
-})();
+    return {
+        logInsightsUrl: shortcutLogInsightsUrl.toString(),
+        logGroupUrl: shortcutLogGroupUrl.toString(),
+    };
+};
 
 let lastReportedAt = 0;
 const reportThreshold = Number.parseInt(process.env.REPORT_THRESHOLD ?? "900", 10) * 1000;
@@ -106,6 +112,8 @@ export const main = async (event: CloudWatchLogsEvent): Promise<void> => {
     const endpointUrl = new URL(zoomSecret.endpointUrl);
     endpointUrl.searchParams.set("format", "full");
 
+    const { logInsightsUrl, logGroupUrl } = createLogUrls(data.logGroup);
+
     const body: ZoomMessage[] = [
         {
             type: "message",
@@ -116,6 +124,11 @@ export const main = async (event: CloudWatchLogsEvent): Promise<void> => {
             type: "message",
             text: "Log Group",
             link: logGroupUrl,
+        },
+        {
+            type: "message",
+            text: "Log Group Name",
+            link: data.logGroup,
         },
     ];
 
