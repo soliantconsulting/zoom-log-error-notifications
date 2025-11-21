@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { Duration, Stack } from "aws-cdk-lib";
+import { Duration, Names, Stack } from "aws-cdk-lib";
 import {
     Code,
     Function as LambdaFunction,
@@ -92,7 +92,7 @@ export class ZoomLogErrorNotifications extends Construct {
     }
 
     public addLogGroup(logGroup: ILogGroup): void {
-        new SubscriptionFilter(this, `SubscriptionFilter-${logGroup.logGroupName}`, {
+        new SubscriptionFilter(this, `SubscriptionFilter-${Names.uniqueId(logGroup)}`, {
             logGroup: logGroup,
             filterPattern: FilterPattern.any(
                 FilterPattern.stringValue("$.level", "=", "error"),
