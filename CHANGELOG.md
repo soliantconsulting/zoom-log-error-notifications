@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.0...v1.2.1) (2025-11-21)
+
+
+### Bug Fixes
+
+* append log group name to subscription filter name ([3c754d8](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/3c754d8b9de24bcc76077e5d77b2e42d66bc2e61))
+
 # [1.2.0](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.1.0...v1.2.0) (2025-11-21)
 
 
