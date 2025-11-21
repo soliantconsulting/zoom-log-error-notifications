@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.1...v1.2.2) (2025-11-21)
+
+
+### Bug Fixes
+
+* use unique name for subscription filter ([b0664d7](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/b0664d755f963a6eb5557ca73195b3ad13dc3d38))
+
 ## [1.2.1](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.0...v1.2.1) (2025-11-21)
 
 
