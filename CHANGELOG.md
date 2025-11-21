@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.1.0...v1.2.0) (2025-11-21)
+
+
+### Features
+
+* allow watching multiple log groups ([fa6c95d](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/fa6c95de23ac57cb80a15515821de422f8c3814f))
+
 # [1.1.0](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.0.1...v1.1.0) (2025-11-20)
 
 
