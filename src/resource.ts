@@ -92,7 +92,7 @@ export class ZoomLogErrorNotifications extends Construct {
     }
 
     public addLogGroup(logGroup: ILogGroup): void {
-        new SubscriptionFilter(this, "SubscriptionFilter", {
+        new SubscriptionFilter(this, `SubscriptionFilter-${logGroup.logGroupName}`, {
             logGroup: logGroup,
             filterPattern: FilterPattern.any(
                 FilterPattern.stringValue("$.level", "=", "error"),
