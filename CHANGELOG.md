@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.3...v1.2.4) (2026-04-08)
+
+
+### Bug Fixes
+
+* place AWS access portal params inside hash fragment ([3bed4bc](https://github.com/soliantconsulting/zoom-log-error-notifications/commit/3bed4bc1b8937999c649744fb2905b81caaaf1c3))
+
 ## [1.2.3](https://github.com/soliantconsulting/zoom-log-error-notifications/compare/v1.2.2...v1.2.3) (2025-11-21)
 
 
