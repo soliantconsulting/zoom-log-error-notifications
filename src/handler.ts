@@ -71,14 +71,19 @@ const createLogUrls = (logGroupName: string): LogUrls => {
         };
     }
 
-    const shortcutUrl = new URL(`https://${awsAccessPortalSubdomain}.awsapps.com/start/#/console`);
-    shortcutUrl.searchParams.set("account_id", accountId);
+    const baseUrl = `https://${awsAccessPortalSubdomain}.awsapps.com/start`;
 
-    const shortcutLogInsightsUrl = new URL(shortcutUrl);
-    shortcutLogInsightsUrl.searchParams.set("destination", logInsightsUrl.toString());
+    const shortcutParams = new URLSearchParams();
+    shortcutParams.set("account_id", accountId);
 
-    const shortcutLogGroupUrl = new URL(shortcutUrl);
-    shortcutLogGroupUrl.searchParams.set("destination", logGroupUrl.toString());
+    const logInsightsParams = new URLSearchParams(shortcutParams);
+    logInsightsParams.set("destination", logInsightsUrl.toString());
+
+    const logGroupParams = new URLSearchParams(shortcutParams);
+    logGroupParams.set("destination", logGroupUrl.toString());
+
+    const shortcutLogInsightsUrl = `${baseUrl}/#/console?${logInsightsParams.toString()}`;
+    const shortcutLogGroupUrl = `${baseUrl}/#/console?${logGroupParams.toString()}`;
 
     return {
         logInsightsUrl: shortcutLogInsightsUrl.toString(),
